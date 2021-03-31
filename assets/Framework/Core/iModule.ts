@@ -10,6 +10,7 @@ export class iModule implements IModule {
     public moduleName: string;
     public enableCache: boolean;
     public enablePreload: boolean;
+    public enableMediatorReleaseAsset: boolean;
 
     private _inited: boolean;
     private _initedAsset: boolean;
@@ -23,19 +24,22 @@ export class iModule implements IModule {
         return [];
     }
 
+    public get inited(): boolean {
+        return this._inited;
+    }
+
+    public get valid(): boolean {
+        return !this._initedAsset || (this.node && this.node.isValid);
+    }
+
     constructor() {
         this.moduleName = Utils.getQualifiedClassName(this);
     }
 
-    public startModule(): void {
+    public init(): void {
         if (this._inited) {
             return;
         }
-
-        this.init();
-    }
-
-    private init(): void {
         this._inited = true;
         this.loadAssets();
     }
@@ -54,20 +58,20 @@ export class iModule implements IModule {
         if (this.assets.length == 0) {
             this.onLoadAssetComplete();
         } else {
-            let loader: Loader = Loader.get();
+            let loader: Loader = Loader.Get();
             loader.cacheAsset = this.enableCache;
-            loader.addCallback(null, this.onLoadAssetComplete, this.onLoadAssetProgress);
+            loader.addCallback(null, this.onLoadAssetComplete.bind(this), this.onLoadAssetProgress.bind(this));
             loader.loads(Assets.getAssets(this.assets));
         }
     }
 
     private onLoadAssetComplete(): void {
-        EventManager.dispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_COMPLETE + this.moduleName, this.moduleName);
+        EventManager.DispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_COMPLETE + this.moduleName, this.moduleName);
         this.initView();
     }
 
     private onLoadAssetProgress(progress: number): void {
-        EventManager.dispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_PROGRESS + this.moduleName, this.moduleName, null, { progress: progress });
+        EventManager.DispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_PROGRESS + this.moduleName, this.moduleName, null, { progress: progress });
     }
 
     private initView(): void {

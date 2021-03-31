@@ -3,10 +3,13 @@ import { IDispose } from "./IDispose";
 export interface IModule extends IDispose {
     moduleName: string;
     assets: any[];
+    inited: boolean;
+    valid: boolean;
     enableCache: boolean;
     enablePreload: boolean;
+    enableMediatorReleaseAsset: boolean;
 
-    startModule(): void;
+    init(): void;
     show(parent: cc.Node, data?: object): void;
     hide(data?: object): void;
     showView(): void;

@@ -1,4 +1,5 @@
 import { iMain } from "../iMain";
+import { GameLayer, GameLayerNames } from "../Support/Enum/GameLayer";
 import { iMediator } from "./iMediator";
 import { iView } from "./iView";
 
@@ -6,66 +7,41 @@ const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 export default class iScene extends iView {
-    // 是否启用过场动画
-    public enableChangeAnimation: boolean = false;
     protected mediator: iMediator;
 
     private layers: cc.Node[] = [];
 
-    @property({ serializable: true })
-    private _creatLayer: boolean = false;
-    @property({ serializable: true })
-    public get creatLayer(): boolean { return this._creatLayer }
-    public set creatLayer(val: boolean) {
-        this._creatLayer = val
-        if (val) { this.initLayers() }
-    }
-
     public onLoad(): void {
         iMain.Init();
-        iMain.setCurrScene(this);
+        iMain.SetCurrScene(this);
         this.initLayers();
-        if (this.enableChangeAnimation) {
-            this.showAnimation();
-        }
-    }
-
-    public start(): void {
-        if (this.mediator != null) {
-            this.mediator.initialize();
-        }
-    }
-
-    public showAnimation(): void {
-        cc.tween(this.node)
-            .set({ opacity: 10 })
-            .to(0.3, { opacity: 255 }, { easing: cc.easing.quadIn })
-            .start();
-    }
-
-    public hideAnimation(callback: Function): void {
-        cc.tween(this.node)
-            .to(0.3, { opacity: 0 }, { easing: cc.easing.quadOut })
-            .call(() => {
-                callback && callback();
-            })
-            .start();
     }
 
     private initLayers(): void {
-        for (let i = 0; i < [].length; i++) {
-            let layer = this.node.getChildByName('');
+        for (let i = 0; i < GameLayerNames.length; i++) {
+            let layer = this.node.getChildByName(GameLayerNames[i]);
             if (layer == null) {
-                layer = new cc.Node('');
+                layer = new cc.Node(GameLayerNames[i]);
                 this.node.addChild(layer);
-                layer.setContentSize(0, 0);
+                layer.setContentSize(iMain.stageWidth, iMain.stageHeight);
             }
             this.layers.push(layer);
+        }
+
+        this.onReady();
+
+        if (this.mediator != null) {
+            this.mediator.initModules();
+            this.mediator.showModules();
         }
     }
 
     public onGetSceneData(data: any): void {
 
+    }
+
+    public onReady(): void {
+        // TODO ...
     }
 
     public onDisable(): void {
@@ -77,6 +53,10 @@ export default class iScene extends iView {
     }
 
     public onDestroy(): void {
+        // TODO ...
+    }
 
+    public getLayer(layerIdx: GameLayer): cc.Node {
+        return this.layers[layerIdx];
     }
 }

@@ -15,20 +15,14 @@ export class ModuleEvent extends iEvent {
         return this._moduleName;
     }
 
-    private _instanceName: string;
-    public get instanceName(): string {
-        return this._instanceName;
-    }
-
     private _gameLayer: GameLayer | cc.Node;
     public get gameLayer(): GameLayer | cc.Node {
         return this._gameLayer;
     }
 
-    constructor(type: string, moduleName: string, instanceName?: string, gameLayer?: GameLayer | cc.Node, data?: object) {
+    constructor(type: string, moduleName: string, gameLayer?: GameLayer | cc.Node, data?: object) {
         super(type, data);
         this._moduleName = moduleName;
-        this._instanceName = instanceName;
         this._gameLayer = gameLayer;
     }
 }

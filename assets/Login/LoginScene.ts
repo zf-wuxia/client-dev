@@ -1,14 +1,11 @@
 import iScene from "../Framework/Core/iScene";
+import LoginMediator from "./LoginMediator";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class LoginScene extends iScene {
-    public onLoad(): void {
-        super.onLoad();
-    }
-    
-    private onWechatLogin(): void {
-
+    public onReady(): void {
+        this.mediator = new LoginMediator();
     }
 }

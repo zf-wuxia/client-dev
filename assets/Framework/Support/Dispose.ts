@@ -13,6 +13,6 @@ export class Dispose implements IDispose {
     }
 
     public dispose(): void {
-        EventManager.removeEvent(this);
+        EventManager.RemoveEvent(this);
     }
 }

@@ -35,7 +35,7 @@ export class iMain {
         }
     }
 
-    public static setCurrScene(scene: iScene): void {
+    public static SetCurrScene(scene: iScene): void {
         this.currScene = scene;
         let canvas = scene.node.getComponent(cc.Canvas);
         if (canvas != null) {
@@ -45,30 +45,24 @@ export class iMain {
                 scene.node.addComponent(cc.Mask);
             }
         }
-        EventManager.dispatchEvent(new SceneEvent(SceneEvent.SET_CURRENT_SCENE, null));
+        EventManager.DispatchEvent(new SceneEvent(SceneEvent.SET_CURRENT_SCENE, null));
     }
 
-    public static getCurrCanvas(): cc.Canvas {
+    public static GetCurrCanvas(): cc.Canvas {
         let canvas = this.currScene.node.getComponent(cc.Canvas);
         return canvas;
     }
 
     public static onCurrSceneDestroy(): void {
         this.currScene = null;
-        EventManager.dispatchEvent(new SceneEvent(SceneEvent.DESTROY_CURRENT_SCENE, null));
+        EventManager.DispatchEvent(new SceneEvent(SceneEvent.DESTROY_CURRENT_SCENE, null));
     }
 
-    public static changeScene(sceneName: string): void {
-        if (cc.isValid(this.currScene) && this.currScene.enableChangeAnimation) {
-            this.currScene.hideAnimation(() => {
-                EventManager.disposeChangeScene(sceneName);
-            });
-        } else {
-            EventManager.disposeChangeScene(sceneName);
-        }
+    public static ChangeScene(sceneName: string): void {
+        EventManager.ChangeScene(sceneName);
     }
 
-    public static getTimer(): number {
+    public static GetTimer(): number {
         return Date.now() - this.startTime;
     }
 }

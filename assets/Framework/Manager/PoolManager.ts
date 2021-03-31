@@ -7,11 +7,11 @@ export class PoolManager {
     private static pools: { [key: string]: any[] } = {};
     private static prefabPaths: { [key: string]: string } = {};
 
-    public static store(obj: IStore): void {
+    public static Store(obj: IStore): void {
         let className = Utils.getQualifiedClassName(obj);
     }
 
-    public static storeNode(obj: cc.Component | cc.Node, pool: boolean = false): void {
+    public static StoreNode(obj: cc.Component | cc.Node, pool: boolean = false): void {
         if (obj instanceof cc.Node) {
             this.resetNode(obj);
             if (obj['_prefab']) {
@@ -20,7 +20,7 @@ export class PoolManager {
                     fileId = '_' + obj['_prefab']['fileId'];
                 }
                 let prefabName = this.prefabPaths[obj['_prefab']['fileId']] + fileId;
-                this.addObject(prefabName, obj);
+                this.AddObject(prefabName, obj);
             }
         }
         else if (obj && obj.node) {
@@ -30,7 +30,7 @@ export class PoolManager {
                 obj.spriteFrame = null;
             }
             let className = Utils.getQualifiedClassName(obj);
-            this.addObject(className, obj);
+            this.AddObject(className, obj);
         }
     }
 
@@ -50,21 +50,21 @@ export class PoolManager {
 
     public static Get(clz: any): any {
         let className = Utils.getQualifiedClassName(clz);
-        let obj = this.getObject(className);
+        let obj = this.GetObject(className);
         if (obj == null) {
             obj = new clz();
         }
         return obj;
     }
 
-    public static getObject(name: string): any {
+    public static GetObject(name: string): any {
         if (this.pools[name] != null && this.pools[name].length > 0) {
             return this.pools[name].shift();
         }
         return null;
     }
 
-    public static addObject(name: string, obj: object): void {
+    public static AddObject(name: string, obj: object): void {
         if (this.pools[name] == null) {
             this.pools[name] = [];
         }
@@ -73,21 +73,21 @@ export class PoolManager {
         }
     }
 
-    public static getPrefabNode(prefabName: string, pool: boolean = false): any {
+    public static GetPrefabNode(prefabName: string, pool: boolean = false): any {
         // if (CacheManager.hasCache()) {
 
         // }
         return null;
     }
 
-    public static getNode(clz: typeof cc.Component | cc.Prefab, pool: boolean = false): any {
+    public static GetNode(clz: typeof cc.Component | cc.Prefab, pool: boolean = false): any {
         let className = Utils.getQualifiedClassName(clz);
         if (clz instanceof cc.Prefab) {
             let fileId = '';
             if (pool) {
                 fileId = '' + clz['data']['_prefab']['fileId'];
             }
-            let prefab = this.getObject(className + '_' + clz.name + fileId);
+            let prefab = this.GetObject(className + '_' + clz.name + fileId);
             if (prefab == null) {
                 prefab = cc.instantiate(clz);
             }
@@ -97,7 +97,7 @@ export class PoolManager {
             return prefab;
         }
 
-        let obj = this.getObject(className);
+        let obj = this.GetObject(className);
         if (obj == null) {
             obj = new cc.Node().addComponent(clz);
         }

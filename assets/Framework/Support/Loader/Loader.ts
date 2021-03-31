@@ -80,8 +80,8 @@ export class Loader implements ILoader {
             setTimeout(() => this.complete(), 1);
         } else {
             let res = this.getURL(this.index) as any;
-            if (CacheManager.hasCache(res)) {
-                this.onLoadComplete(null, CacheManager.getCache(res));
+            if (CacheManager.HasCache(res)) {
+                this.onLoadComplete(null, CacheManager.GetCache(res));
             } else {
                 let type = this.getAssetType(this.index);
                 if (typeof res == 'object') {
@@ -121,7 +121,7 @@ export class Loader implements ILoader {
         }
         else if (this.cacheAsset) {
             let res = this.urls[this.index];
-            CacheManager.addCache(res, resource);
+            CacheManager.AddCache(res, resource);
         }
         this.loadAsset();
     }
@@ -164,10 +164,10 @@ export class Loader implements ILoader {
         this.urls.length = 0;
         this.contents.length = 0;
         this.cacheAsset = true;
-        PoolManager.store(this);
+        PoolManager.Store(this);
     }
 
-    public static get(): Loader {
+    public static Get(): Loader {
         return PoolManager.Get(Loader);
     }
 }

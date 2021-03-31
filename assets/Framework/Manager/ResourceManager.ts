@@ -127,19 +127,19 @@ export class ResourceManager {
             assetName = asset.name;
         }
 
-        if (CacheManager.hasCache(assetName)) {
+        if (CacheManager.HasCache(assetName)) {
             this.excuteAssetCallback(assetName, loaderType, data);
         }
         else if (this.loadCallbacks[assetName] == null) {
             let loader: ILoader;
             switch (loaderType) {
                 case LoaderType.SCENE:
-                    loader = SceneLoader.get();
+                    loader = SceneLoader.Get();
                     break;
                 case LoaderType.DRAGON_BONE:
                     break;
                 default:
-                    loader = Loader.get();
+                    loader = Loader.Get();
                     break;
             }
 
@@ -223,7 +223,7 @@ export class ResourceManager {
     private static excuteAssetCallback(assetPath: string, loaderType: LoaderType, data: any): void {
         switch (loaderType) {
             case LoaderType.SPRITE_ATLAS:
-                let spf = CacheManager.getCache(assetPath).getSpriteFrame(data['assetName']);
+                let spf = CacheManager.GetCache(assetPath).getSpriteFrame(data['assetName']);
                 if (data['sprite'] != null) {
                     (data["sprite"] as cc.Sprite).spriteFrame = spf;
                 }
@@ -232,11 +232,11 @@ export class ResourceManager {
                 }
                 break;
             case LoaderType.SPRITE, LoaderType.IMAGE:
-                let asset = CacheManager.getCache(assetPath);
+                let asset = CacheManager.GetCache(assetPath);
                 // 将Texture2D 转换成SpriteFrame
                 if (asset instanceof cc.Texture2D) {
                     asset = new cc.SpriteFrame(asset);
-                    CacheManager.addCache(assetPath, asset);
+                    CacheManager.AddCache(assetPath, asset);
                 }
                 if (data['sprite'] != null) {
                     (data['sprite'] as cc.Sprite).spriteFrame = asset;
@@ -247,13 +247,13 @@ export class ResourceManager {
                 break;
             case LoaderType.FONT:
                 if (data['label'] != null) {
-                    data['label'].font = CacheManager.getCache(assetPath);
+                    data['label'].font = CacheManager.GetCache(assetPath);
                 }
                 break;
             case LoaderType.ANIMATION:
                 if (data['animAtion'] != null) {
                     let anim: cc.Animation = data['animAtion'];
-                    let clip = CacheManager.getCache(assetPath);
+                    let clip = CacheManager.GetCache(assetPath);
                     anim.addClip(clip);
                     if (data['playName']) {
                         anim.play(data['playName'], 0);
@@ -264,7 +264,7 @@ export class ResourceManager {
                 }
                 break;
             case LoaderType.DRAGON_BONE:
-                let dragonBoneData = CacheManager.getCache(assetPath);
+                let dragonBoneData = CacheManager.GetCache(assetPath);
                 if (data["armatureDisplay"] != null) {
                     data["armatureDisplay"].dragonAsset = dragonBoneData.dragonAsset
                     data["armatureDisplay"].dragonAtlasAsset = dragonBoneData.dragonAtlasAsset
@@ -309,10 +309,53 @@ export class ResourceManager {
 
     public static InstantiatePrefab(prefabName: string): any {
         let prefabAsset = Assets.getPrefab(prefabName);
-        let clz = CacheManager.getCache(prefabAsset);
+        let clz = CacheManager.GetCache(prefabAsset);
         if (clz != null) {
             return cc.instantiate(clz);
         }
         return null;
+    }
+
+    public static ReleaseAsset(asset: any | string): void {
+        let path: string;
+        if (typeof asset == 'string') {
+            path = Assets.getPrefab(asset);
+        } else {
+            switch (asset.type) {
+                case LoaderType.PREFAB:
+                    path = Assets.getPrefab(asset.asset);
+                    break;
+                case LoaderType.IMAGE:
+                    path = Assets.getTexture(asset.asset);
+                    break;
+                case LoaderType.AUDIO:
+                    path = Assets.getAudioURL(asset.asset, asset.audioType);
+                    break;
+                case LoaderType.DRAGON_BONE:
+                    let dragonBoneData = Assets.getDragonBone(asset.asset);
+                    path = dragonBoneData.tex;
+                    let texture = CacheManager.GetCache(path);
+                    if (texture != null) {
+                        cc.loader.releaseAsset(texture);
+                    }
+                    path = dragonBoneData.ske;
+                    break;
+            }
+        }
+
+        if (path != null) {
+            let a = CacheManager.GetCache(path);
+            if (a != null) {
+                cc.loader.releaseAsset(a);
+            }
+            CacheManager.RemoveCache(path);
+            console.log('释放资源 =>', path);
+        } else {
+            if (asset.type == LoaderType.IMAGE) {
+                path = Assets.getTexture(asset.asset);
+            }
+            cc.loader.releaseRes(path);
+            CacheManager.RemoveCache(path);
+        }
     }
 }
