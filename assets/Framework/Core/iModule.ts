@@ -9,7 +9,6 @@ import { Utils } from "../Support/Utils/Utils";
 export class iModule implements IModule {
     public moduleName: string;
     public enableCache: boolean;
-    public enablePreload: boolean;
     public enableMediatorReleaseAsset: boolean;
 
     private _inited: boolean;
@@ -81,8 +80,8 @@ export class iModule implements IModule {
         this._initedAsset = true;
 
         this.initNode();
-        this.showView();
         this.initPreset();
+        this.showView();
         this.bindEvents();
     }
 
@@ -93,6 +92,7 @@ export class iModule implements IModule {
                 this.parent.addChild(this.node);
             }
         }
+        this.onReady();
     }
 
     public hideView(): void {
@@ -144,5 +144,9 @@ export class iModule implements IModule {
         this.parent = null;
         this.moduleName = null;
         this.moduleData = null;
+    }
+
+    protected onReady(): void {
+        // TODO ...
     }
 }

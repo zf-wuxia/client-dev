@@ -6,7 +6,6 @@ export interface IModule extends IDispose {
     inited: boolean;
     valid: boolean;
     enableCache: boolean;
-    enablePreload: boolean;
     enableMediatorReleaseAsset: boolean;
 
     init(): void;

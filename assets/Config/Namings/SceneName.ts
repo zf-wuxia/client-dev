@@ -3,6 +3,6 @@ export class SceneName {
     static SCENE_LUANCHER = 'LanucherScene';
     // 登录界面
     static SCENE_LOGIN = 'LoginScene';
-    // 登录界面
-    static SCENE_LOBBY = 'LobbyScene';
+    // 游戏界面
+    static SCENE_GAME = 'GameScene';
 }
