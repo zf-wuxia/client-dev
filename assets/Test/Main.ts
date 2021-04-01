@@ -1,4 +1,4 @@
-import iTableView from "./Framework/Components/iTableView";
+import iTableView from "../Framework/Components/iTableView";
 
 const { ccclass, property } = cc._decorator;
 

@@ -5,7 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import iViewCell from "./Framework/Components/iViewCell";
+import iViewCell from "../Framework/Components/iViewCell";
 
 const {ccclass, property} = cc._decorator;
 

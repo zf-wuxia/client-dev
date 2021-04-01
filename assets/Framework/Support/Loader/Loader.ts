@@ -91,12 +91,7 @@ export class Loader implements ILoader {
                 if (res == '' || res == null || res.length == 0) {
                     return;
                 }
-                if (CC_EDITOR) {
-                    var uuid = Editor.assetdb.remote.urlToUuid('db://assets/' + res);
-                    cc.loader.load({ type: 'uuid', uuid: uuid }, (a, b, c) => this.onLoadProgress(a, b, c), (a, b) => this.onLoadComplete(a, b));
-                } else {
-                    cc.loader.loadRes(res, type, (a, b, c) => this.onLoadProgress(a, b, c), (a, b) => this.onLoadComplete(a, b));
-                }
+                cc.resources.load(res, type, (a, b, c) => this.onLoadProgress(a, b, c), (a, b) => this.onLoadComplete(a, b));
             }
         }
     }

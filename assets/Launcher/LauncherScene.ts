@@ -5,6 +5,10 @@ import LoginMediator from "../Login/LoginMediator";
 
 const {ccclass, property} = cc._decorator;
 
+const PROGRESS_WIDTH = 504;
+const NATIVE_ENTER_MESSAGE = '正在更新资源，请耐心等候。。。';
+const BROWSER_ENTER_MESSAGE = '正在加载必要资源，请耐心等待。。。';
+
 @ccclass
 export default class LauncherScene extends iScene {
     @property(cc.Node)
@@ -22,16 +26,16 @@ export default class LauncherScene extends iScene {
         if (cc.sys.isNative) {
             this.nativeEnterLogic();
         } else {
-            this.defaultEnterLogic();
+            this.browserEnterLogic();
         }
     }
 
     private nativeEnterLogic(): void {
-        this.lblMessage.string = '正在更新资源，请耐心等候。。。';
+        this.lblMessage.string = NATIVE_ENTER_MESSAGE;
     }
 
-    private defaultEnterLogic(): void {
-        this.lblMessage.string = '正在加载必要资源，请耐心等待。。。';
+    private browserEnterLogic(): void {
+        this.lblMessage.string = BROWSER_ENTER_MESSAGE;
 
         let loginMediator: LoginMediator = new LoginMediator();
         loginMediator.initModules();
@@ -43,8 +47,7 @@ export default class LauncherScene extends iScene {
     }
 
     private onLoadProgress(progress: number): void {
-        let widthLimit = 504;
         this.lblProgress.string = progress + '%';
-        this.nodeProgress.width = widthLimit * progress * 0.01;
+        this.nodeProgress.width = PROGRESS_WIDTH * progress * 0.01;
     }
 }

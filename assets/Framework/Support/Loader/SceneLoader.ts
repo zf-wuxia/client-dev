@@ -63,8 +63,7 @@ export class SceneLoader implements ILoader {
                 let info = cc.assetManager.main.getSceneInfo(res);
                 if (info) {
                     cc.director.emit(cc.Director.EVENT_BEFORE_SCENE_LOADING, res);
-                    console.log('LoadSceneer', JSON.stringify({ uuid: info.uuid, type: 'uuid' }));
-                    cc.loader.load({ uuid: info.uuid, type: 'uuid' }, (a, b, c) => this.onLoadProgress(a, b, c), (a, b) => this.onLoadComplete(a, b));
+                    cc.assetManager.main.loadScene(res, (a, b, c) => this.onLoadProgress(a, b, c), (a, b) => this.onLoadComplete(a, b));
                 } else {
                     this.onLoadError({ message: res + ' is undefined!!!', resName: res });
                     this.loadAsset();
