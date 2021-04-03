@@ -3,3 +3,5 @@
 /local
 /temp
 /build
+# Rubeex temp dir
+/.rubeex/
