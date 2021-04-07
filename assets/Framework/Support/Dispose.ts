@@ -5,14 +5,14 @@ export class Dispose implements IDispose {
     public static ClassName: string = 'Dispose';
 
     constructor() {
-        this.initialize();
+        this.init();
     }
 
-    public initialize(): void {
+    public init(): void {
 
     }
 
     public dispose(): void {
-        EventManager.RemoveEvent(this);
+        EventManager.getInstance().removeEvent(null, null, this);
     }
 }

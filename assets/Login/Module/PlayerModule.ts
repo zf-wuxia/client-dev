@@ -1,7 +1,6 @@
 import { SceneName } from "../../Config/Namings/SceneName";
 import { iModule } from "../../Framework/Core/iModule";
-import { iMainMediator } from "../../Framework/iMainMediator";
-import { EventManager } from "../../Framework/Manager/EventManager";
+import { SceneManager } from "../../Framework/Manager/SceneManager";
 import { Utils } from "../../Framework/Support/Utils/Utils";
 
 export class PlayerModule extends iModule {
@@ -57,7 +56,7 @@ export class PlayerModule extends iModule {
 
     private onSubmit(): void {
         console.log(`名字: ${this.txtName.string}`);
-        EventManager.ChangeScene(SceneName.SCENE_GAME);
+        SceneManager.getInstance().changeScene(SceneName.SCENE_GAME);
     }
 
     private onRandom(): void {

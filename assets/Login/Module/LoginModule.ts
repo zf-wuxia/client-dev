@@ -27,13 +27,13 @@ export class LoginModule extends iModule {
 
     private onLogin(): void {
         console.log('点击了登录');
-        EventManager.ShowModule(ModuleName.PLAYER_MODULE, GameLayer.Popup);
+        EventManager.getInstance().showModule(ModuleName.PLAYER_MODULE, GameLayer.Popup);
         this.hide();
     }
 
     private onRegister(): void {
         console.log('点击了注册');
-        EventManager.ShowModule(ModuleName.REGISTER_MODULE, GameLayer.Popup);
+        EventManager.getInstance().showModule(ModuleName.REGISTER_MODULE, GameLayer.Popup);
     }
 
     private onChangePassword(): void {

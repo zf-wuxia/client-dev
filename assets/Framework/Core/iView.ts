@@ -1,7 +1,7 @@
-const {ccclass, menu} = cc._decorator;
+const { ccclass, menu } = cc._decorator;
 
 @ccclass
-export  class iView extends cc.Component {
+export class iView extends cc.Component {
     public onEnable(): void {
         this.addEvents();
     }

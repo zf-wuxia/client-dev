@@ -1,9 +1,9 @@
 import { SceneName } from "../Config/Namings/SceneName";
-import iScene from "../Framework/Core/iScene";
-import { iMain } from "../Framework/iMain";
-import LoginMediator from "../Login/LoginMediator";
+import { iScene } from "../Framework/Core/iScene";
+import { SceneManager } from "../Framework/Manager/SceneManager";
+import LoginScene from "../Login/LoginScene";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 const PROGRESS_WIDTH = 504;
 const NATIVE_ENTER_MESSAGE = '正在更新资源，请耐心等候。。。';
@@ -37,13 +37,13 @@ export default class LauncherScene extends iScene {
     private browserEnterLogic(): void {
         this.lblMessage.string = BROWSER_ENTER_MESSAGE;
 
-        let loginMediator: LoginMediator = new LoginMediator();
-        loginMediator.initModules();
-        loginMediator.preloadAssets().addCallback(this, this.onLoadComplete, this.onLoadProgress);
+        let loginScene: LoginScene = new LoginScene();
+        loginScene.initModules();
+        loginScene.preloadAssets().addCallback(this, this.onLoadComplete, this.onLoadProgress);
     }
 
     private onLoadComplete(): void {
-        iMain.ChangeScene(SceneName.SCENE_LOGIN);
+        SceneManager.getInstance().changeScene(SceneName.SCENE_LOGIN);
     }
 
     private onLoadProgress(progress: number): void {

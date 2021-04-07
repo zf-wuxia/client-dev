@@ -50,7 +50,7 @@ export class iFunction extends iStore {
     }
 
     public static Get(func: Function, target?: any, args?: any[], once: boolean = true): iFunction {
-        let result: iFunction = PoolManager.Get(iFunction);
+        let result: iFunction = PoolManager.getInstance().get(iFunction);
         result.func = func;
         result.once = once;
         result.target = target;

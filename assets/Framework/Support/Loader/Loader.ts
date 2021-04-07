@@ -65,12 +65,13 @@ export class Loader implements ILoader {
         }
     }
 
-    public loads(urls: string[], assetTypes?: any[], loaderTypes?: LoaderType[]): void {
+    public loads(urls: string[], assetTypes?: any[], loaderTypes?: LoaderType[]): Loader {
         this.urls = urls;
         this.assetTypes = assetTypes;
         this.loaderTypes = loaderTypes;
         this.progress = 100 / urls.length;
         this.loadAsset();
+        return this;
     }
 
     public loadAsset(): void {
@@ -80,8 +81,8 @@ export class Loader implements ILoader {
             setTimeout(() => this.complete(), 1);
         } else {
             let res = this.getURL(this.index) as any;
-            if (CacheManager.HasCache(res)) {
-                this.onLoadComplete(null, CacheManager.GetCache(res));
+            if (CacheManager.getInstance().hasCache(res)) {
+                this.onLoadComplete(null, CacheManager.getInstance().getCache(res));
             } else {
                 let type = this.getAssetType(this.index);
                 if (typeof res == 'object') {
@@ -116,7 +117,7 @@ export class Loader implements ILoader {
         }
         else if (this.cacheAsset) {
             let res = this.urls[this.index];
-            CacheManager.AddCache(res, resource);
+            CacheManager.getInstance().addCache(res, resource);
         }
         this.loadAsset();
     }
@@ -159,10 +160,10 @@ export class Loader implements ILoader {
         this.urls.length = 0;
         this.contents.length = 0;
         this.cacheAsset = true;
-        PoolManager.Store(this);
+        PoolManager.getInstance().store(this);
     }
 
-    public static Get(): Loader {
-        return PoolManager.Get(Loader);
+    public static get(): Loader {
+        return PoolManager.getInstance().get(Loader);
     }
 }

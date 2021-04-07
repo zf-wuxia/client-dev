@@ -57,8 +57,8 @@ export class SceneLoader implements ILoader {
             setTimeout(() => this.complete(), 1);
         } else {
             let res = this.getSceneName(this.index);
-            if (CacheManager.HasCache(res)) {
-                this.onLoadComplete(null, CacheManager.GetCache(res));
+            if (CacheManager.getInstance().hasCache(res)) {
+                this.onLoadComplete(null, CacheManager.getInstance().getCache(res));
             } else {
                 let info = cc.assetManager.main.getSceneInfo(res);
                 if (info) {
@@ -92,7 +92,7 @@ export class SceneLoader implements ILoader {
         }
         else if (this.cacheAsset) {
             let res = this.sceneName[this.index];
-            CacheManager.AddCache(res, resource);
+            CacheManager.getInstance().addCache(res, resource);
         }
         this.loadAsset();
     }
@@ -135,7 +135,7 @@ export class SceneLoader implements ILoader {
         this.sceneName.length = 0;
         this.contents.length = 0;
         this.cacheAsset = true;
-        PoolManager.Store(this);
+        PoolManager.getInstance().store(this);
     }
 
     public static Get(): SceneLoader {

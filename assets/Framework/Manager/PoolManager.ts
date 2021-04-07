@@ -1,17 +1,20 @@
-import { iStore } from "../Core/iStore";
 import { IStore } from "../Interfaces/IStore";
 import { Utils } from "../Support/Utils/Utils";
-import { CacheManager } from "./CacheManager";
 
 export class PoolManager {
-    private static pools: { [key: string]: any[] } = {};
-    private static prefabPaths: { [key: string]: string } = {};
+    private pools: { [key: string]: any[] };
+    private prefabPaths: { [key: string]: string };
 
-    public static Store(obj: IStore): void {
+    constructor() {
+        this.pools = {};
+        this.prefabPaths = {};
+    }
+
+    public store(obj: IStore): void {
         let className = Utils.getQualifiedClassName(obj);
     }
 
-    public static StoreNode(obj: cc.Component | cc.Node, pool: boolean = false): void {
+    public storeNode(obj: cc.Component | cc.Node, pool: boolean = false): void {
         if (obj instanceof cc.Node) {
             this.resetNode(obj);
             if (obj['_prefab']) {
@@ -20,7 +23,7 @@ export class PoolManager {
                     fileId = '_' + obj['_prefab']['fileId'];
                 }
                 let prefabName = this.prefabPaths[obj['_prefab']['fileId']] + fileId;
-                this.AddObject(prefabName, obj);
+                this.addObject(prefabName, obj);
             }
         }
         else if (obj && obj.node) {
@@ -30,11 +33,11 @@ export class PoolManager {
                 obj.spriteFrame = null;
             }
             let className = Utils.getQualifiedClassName(obj);
-            this.AddObject(className, obj);
+            this.addObject(className, obj);
         }
     }
 
-    private static resetNode(node: cc.Node): void {
+    private resetNode(node: cc.Node): void {
         if (node.parent) {
             node.removeFromParent();
         }
@@ -48,23 +51,23 @@ export class PoolManager {
         node.y = 0;
     }
 
-    public static Get(clz: any): any {
+    public get(clz: any): any {
         let className = Utils.getQualifiedClassName(clz);
-        let obj = this.GetObject(className);
+        let obj = this.getObject(className);
         if (obj == null) {
             obj = new clz();
         }
         return obj;
     }
 
-    public static GetObject(name: string): any {
+    public getObject(name: string): any {
         if (this.pools[name] != null && this.pools[name].length > 0) {
             return this.pools[name].shift();
         }
         return null;
     }
 
-    public static AddObject(name: string, obj: object): void {
+    public addObject(name: string, obj: object): void {
         if (this.pools[name] == null) {
             this.pools[name] = [];
         }
@@ -73,21 +76,21 @@ export class PoolManager {
         }
     }
 
-    public static GetPrefabNode(prefabName: string, pool: boolean = false): any {
+    public getPrefabNode(prefabName: string, pool: boolean = false): any {
         // if (CacheManager.hasCache()) {
 
         // }
         return null;
     }
 
-    public static GetNode(clz: typeof cc.Component | cc.Prefab, pool: boolean = false): any {
+    public getNode(clz: typeof cc.Component | cc.Prefab, pool: boolean = false): any {
         let className = Utils.getQualifiedClassName(clz);
         if (clz instanceof cc.Prefab) {
             let fileId = '';
             if (pool) {
                 fileId = '' + clz['data']['_prefab']['fileId'];
             }
-            let prefab = this.GetObject(className + '_' + clz.name + fileId);
+            let prefab = this.getObject(className + '_' + clz.name + fileId);
             if (prefab == null) {
                 prefab = cc.instantiate(clz);
             }
@@ -97,10 +100,18 @@ export class PoolManager {
             return prefab;
         }
 
-        let obj = this.GetObject(className);
+        let obj = this.getObject(className);
         if (obj == null) {
             obj = new cc.Node().addComponent(clz);
         }
         return obj;
+    }
+
+    private static _instance: PoolManager;
+    public static getInstance(): PoolManager {
+        if (this._instance == null) {
+            this._instance = new PoolManager();
+        }
+        return this._instance;
     }
 }

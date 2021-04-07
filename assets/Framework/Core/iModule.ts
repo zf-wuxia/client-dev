@@ -57,7 +57,7 @@ export class iModule implements IModule {
         if (this.assets.length == 0) {
             this.onLoadAssetComplete();
         } else {
-            let loader: Loader = Loader.Get();
+            let loader: Loader = Loader.get();
             loader.cacheAsset = this.enableCache;
             loader.addCallback(null, this.onLoadAssetComplete.bind(this), this.onLoadAssetProgress.bind(this));
             loader.loads(Assets.getAssets(this.assets));
@@ -65,12 +65,14 @@ export class iModule implements IModule {
     }
 
     private onLoadAssetComplete(): void {
-        EventManager.DispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_COMPLETE + this.moduleName, this.moduleName);
+        let em: EventManager = EventManager.getInstance();
+        em.dispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_COMPLETE + this.moduleName, this.moduleName);
         this.initView();
     }
 
     private onLoadAssetProgress(progress: number): void {
-        EventManager.DispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_PROGRESS + this.moduleName, this.moduleName, null, { progress: progress });
+        let em: EventManager = EventManager.getInstance();
+        em.dispatchModuleEvent(ModuleEvent.LOAD_MODULE_ASSET_PROGRESS + this.moduleName, this.moduleName, null, { progress: progress });
     }
 
     private initView(): void {

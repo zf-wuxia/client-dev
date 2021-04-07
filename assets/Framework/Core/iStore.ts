@@ -9,6 +9,6 @@ export class iStore extends Dispose implements IDispose {
 
     public dispose(): void {
         super.dispose();
-        EventManager.RemoveEvent(this);
+        EventManager.getInstance().removeEvent(null, null, this);
     }
 }
