@@ -134,7 +134,7 @@ export class ResourceManager {
             let loader: ILoader;
             switch (loaderType) {
                 case LoaderType.SCENE:
-                    loader = SceneLoader.Get();
+                    loader = SceneLoader.get();
                     break;
                 case LoaderType.DRAGON_BONE:
                     break;

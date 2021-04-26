@@ -1,18 +1,19 @@
-import { SceneName } from "../Config/Namings/SceneName";
 import { iScene } from "../Framework/Core/iScene";
-import { SceneManager } from "../Framework/Manager/SceneManager";
-import LoginScene from "../Login/LoginScene";
+import { DefaultEnter } from "./Scheme/DefaultEnter";
+import { NativeEnter } from "./Scheme/NativeEnter";
 
 const { ccclass, property } = cc._decorator;
 
-const PROGRESS_WIDTH = 504;
-const NATIVE_ENTER_MESSAGE = '正在更新资源，请耐心等候。。。';
-const BROWSER_ENTER_MESSAGE = '正在加载必要资源，请耐心等待。。。';
+// 进度条总长度
+export const PROGRESS_WIDTH = 504;
 
 @ccclass
 export default class LauncherScene extends iScene {
     @property(cc.Node)
-    nodeProgress: cc.Node = null;
+    barProgress: cc.Node = null;
+
+    @property(cc.Node)
+    layProgress: cc.Node = null;
 
     @property(cc.Label)
     lblProgress: cc.Label = null;
@@ -23,31 +24,8 @@ export default class LauncherScene extends iScene {
     public onLoad(): void {
         super.onLoad();
 
-        if (cc.sys.isNative) {
-            this.nativeEnterLogic();
-        } else {
-            this.browserEnterLogic();
-        }
-    }
-
-    private nativeEnterLogic(): void {
-        this.lblMessage.string = NATIVE_ENTER_MESSAGE;
-    }
-
-    private browserEnterLogic(): void {
-        this.lblMessage.string = BROWSER_ENTER_MESSAGE;
-
-        let loginScene: LoginScene = new LoginScene();
-        loginScene.initModules();
-        loginScene.preloadAssets().addCallback(this, this.onLoadComplete, this.onLoadProgress);
-    }
-
-    private onLoadComplete(): void {
-        SceneManager.getInstance().changeScene(SceneName.SCENE_LOGIN);
-    }
-
-    private onLoadProgress(progress: number): void {
-        this.lblProgress.string = progress + '%';
-        this.nodeProgress.width = PROGRESS_WIDTH * progress * 0.01;
+        this.layProgress.active = false;
+        
+        CC_JSB ? this.node.addComponent(NativeEnter) : this.node.addComponent(DefaultEnter);
     }
 }

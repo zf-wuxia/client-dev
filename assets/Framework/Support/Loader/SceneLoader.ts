@@ -138,7 +138,7 @@ export class SceneLoader implements ILoader {
         PoolManager.getInstance().store(this);
     }
 
-    public static Get(): SceneLoader {
-        return PoolManager.Get(SceneLoader);
+    public static get(): SceneLoader {
+        return PoolManager.getInstance().get(SceneLoader);
     }
 }

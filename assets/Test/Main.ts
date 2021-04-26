@@ -1,11 +1,11 @@
-import iTableView from "../Framework/Components/iTableView";
+// import iTableView from "../Framework/Components/iTableView";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Main extends cc.Component {
-    @property(iTableView)
-    tableView: iTableView = null;
+    // @property(iTableView)
+    // tableView: iTableView = null;
 
     onLoad(): void {
         var arr = [
@@ -26,11 +26,11 @@ export default class Main extends cc.Component {
             }
         ];
 
-        // setTimeout(() => {
+        // this.tableView.dataSource = arr;
+    }
 
-            this.tableView.dataSource = arr;
-
-        // }, 200);
-        window['kk'] = this;
+    onRestart(): void {
+        cc.game.restart();
+        cc.log('重启引擎');
     }
 }

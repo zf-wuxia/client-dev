@@ -266,7 +266,6 @@ export default class iTableView extends cc.Component {
     }
 
     public start() {
-        console.log('start')
         this.calculateBoundary()
         if (this.content != null) {
             cc.director.once(cc.Director.EVENT_BEFORE_DRAW, this.adjustContentOutOfBoundary, this)

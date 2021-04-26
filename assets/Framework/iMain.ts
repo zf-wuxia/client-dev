@@ -62,6 +62,9 @@ export class iMain {
             hh = hh.replace("px", "");
             this._canvasScale = cc.v2(Number(ww) / STAGE_WIDTH, Number(hh) / STAGE_HEIGHT);
         }
+
+        (window as any)['Utils'] = {};
+        cc.log('init');
     }
 
     private initModules(): void {
